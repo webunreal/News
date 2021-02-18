@@ -8,16 +8,19 @@
 import UIKit
 
 public struct Network {
-    
     private let imageCache = NSCache<AnyObject, AnyObject>()
     
     private let newsApiUrl = "https://newsapi.org/v2/top-headlines?"
-    private let country = "country=us&"
     private let apiKey = "apiKey=84c2f940d46e414cb934bb89de1693b0"
     
-    public func loadData(completion: @escaping (Result<[News], Error>) -> Void) {
+    public func loadData(searchingText: String?, country: String, category: String, completion: @escaping (Result<[News], Error>) -> Void) {
         var news: [News] = []
-        guard let url = URL(string: newsApiUrl + country + apiKey) else {
+        
+        let search = "q=\(searchingText ?? "")&"
+        let country = "country=\(country)&"
+        let category = "category=\(category)&"
+        
+        guard let url = URL(string: newsApiUrl + search + country + category + apiKey) else {
             return
         }
         
@@ -51,8 +54,8 @@ public struct Network {
         }.resume()
     }
     
-    public func downloadImage(imageURL: String, competion: @escaping((UIImage) -> Void)) {
-        var urlToImage = imageURL
+    public func downloadImage(imageUrl: String, competion: @escaping((UIImage) -> Void)) {
+        var urlToImage = imageUrl
         if let afterJpg = urlToImage.range(of: ".jpg") {
             urlToImage.removeSubrange(afterJpg.upperBound..<urlToImage.endIndex)
         }
@@ -73,7 +76,7 @@ public struct Network {
                             return }
                         writeToCache(image: image, url: urlToImage)
                         competion(image)
-                        }
+                    }
                 } catch {
                     DispatchQueue.main.async {
                         competion(UIImage(named: "noImage") ?? UIImage())

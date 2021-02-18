@@ -20,6 +20,8 @@
 		60989CF825D30623008A3F98 /* HomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60989CF725D30623008A3F98 /* HomeTableViewCell.swift */; };
 		60E9C74625D5A02D00D2FB38 /* DetailedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E9C74525D5A02D00D2FB38 /* DetailedViewController.swift */; };
 		60E9C7C425D9513000D2FB38 /* SourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E9C7C325D9513000D2FB38 /* SourceViewController.swift */; };
+		60FE864B25DEC84400F50266 /* Picker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FE864A25DEC84400F50266 /* Picker.swift */; };
+		60FE865025DEC91000F50266 /* NewsParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FE864F25DEC91000F50266 /* NewsParameters.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +61,8 @@
 		60989CF725D30623008A3F98 /* HomeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTableViewCell.swift; sourceTree = "<group>"; };
 		60E9C74525D5A02D00D2FB38 /* DetailedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedViewController.swift; sourceTree = "<group>"; };
 		60E9C7C325D9513000D2FB38 /* SourceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceViewController.swift; sourceTree = "<group>"; };
+		60FE864A25DEC84400F50266 /* Picker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Picker.swift; sourceTree = "<group>"; };
+		60FE864F25DEC91000F50266 /* NewsParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsParameters.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +157,8 @@
 			isa = PBXGroup;
 			children = (
 				605357A525D321700033060C /* News.swift */,
+				60FE864A25DEC84400F50266 /* Picker.swift */,
+				60FE864F25DEC91000F50266 /* NewsParameters.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -307,11 +313,13 @@
 			files = (
 				60E9C74625D5A02D00D2FB38 /* DetailedViewController.swift in Sources */,
 				605357A625D321700033060C /* News.swift in Sources */,
+				60FE865025DEC91000F50266 /* NewsParameters.swift in Sources */,
 				605357A125D30C280033060C /* Network.swift in Sources */,
 				605F45FD25D2F8D80044ED81 /* HomeViewController.swift in Sources */,
 				605F45F925D2F8D80044ED81 /* AppDelegate.swift in Sources */,
 				60E9C7C425D9513000D2FB38 /* SourceViewController.swift in Sources */,
 				60989CF825D30623008A3F98 /* HomeTableViewCell.swift in Sources */,
+				60FE864B25DEC84400F50266 /* Picker.swift in Sources */,
 				605F45FB25D2F8D80044ED81 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

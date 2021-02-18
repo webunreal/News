@@ -17,7 +17,7 @@ public struct News: Decodable {
     var publishedAt : String
     var content: String?
     
-    enum CodingKeys: String, CodingKey {
+   private enum CodingKeys: String, CodingKey {
         case source
         case author
         case title

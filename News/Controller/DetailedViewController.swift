@@ -23,7 +23,7 @@ class DetailedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         if let imageURL = urlToImageFromSegue {
-            network.downloadImage(imageURL: imageURL) { image in
+            network.downloadImage(imageUrl: imageURL) { image in
                 self.newsImage.image = image
             }
         } else {

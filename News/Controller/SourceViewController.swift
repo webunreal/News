@@ -9,7 +9,7 @@ import UIKit
 import WebKit
 
 class SourceViewController: UIViewController {
-
+    
     @IBOutlet weak private var webView: WKWebView!
     
     public var urlToSource: String = ""
@@ -19,8 +19,8 @@ class SourceViewController: UIViewController {
         if let url = URL(string: urlToSource) {
             webView.load(URLRequest(url: url))
         }
-
+        
         super.viewDidLoad()
     }
-
+    
 }
