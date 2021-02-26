@@ -197,9 +197,8 @@
                                     <constraint firstItem="rtC-sJ-S2F" firstAttribute="leading" secondItem="meb-hy-jnw" secondAttribute="trailing" constant="10" id="xJ1-3b-vuT"/>
                                 </constraints>
                             </view>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="fLa-dG-5NF">
-                                <rect key="frame" x="197" y="438" width="20" height="20"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="fLa-dG-5NF">
+                                <rect key="frame" x="188.5" y="456.5" width="37" height="37"/>
                             </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -207,7 +206,9 @@
                         <constraints>
                             <constraint firstItem="746-yE-XlK" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="0Pm-Ee-1lI"/>
                             <constraint firstItem="746-yE-XlK" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="4uA-zi-Ua9"/>
+                            <constraint firstItem="fLa-dG-5NF" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="DoR-u7-YHL"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="GBD-5s-j2O" secondAttribute="bottom" id="EE6-Eu-sLp"/>
+                            <constraint firstItem="fLa-dG-5NF" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="FPw-KU-Ndw"/>
                             <constraint firstItem="GBD-5s-j2O" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="HrN-Af-Q8J"/>
                             <constraint firstItem="746-yE-XlK" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="YMI-vb-tRX"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="GBD-5s-j2O" secondAttribute="trailing" constant="100" id="hZV-64-I5w"/>

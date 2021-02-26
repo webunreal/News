@@ -25,15 +25,17 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     private let network = Network()
     private var news: [News] = []
     private var showingMenu = false
-   
-    private var selectedCategory = "General" {
+    
+    private var selectedCategory = UserDefaults.standard.string(forKey: "selectedCategory") {
         didSet {
+            updateUserDefaults()
             updateLabels()
         }
     }
-
-    private var selectedCountry = "us" {
+    
+    private var selectedCountry = UserDefaults.standard.string(forKey: "selectedCountry") {
         didSet {
+            updateUserDefaults()
             updateLabels()
         }
     }
@@ -47,7 +49,17 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         pickerView.delegate = self
         pickerView.dataSource = self
         
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "line.horizontal.3"), style:.plain, target: target(forAction: #selector(changeSideMenuShowing), withSender: nil), action: #selector(changeSideMenuShowing))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "line.horizontal.3"),
+                                                                style: .plain,
+                                                                target: target(forAction: #selector(changeSideMenuShowing), withSender: nil),
+                                                                action: #selector(changeSideMenuShowing))
+        
+        let newsCategoryTap = UITapGestureRecognizer(target: self, action: #selector(showNewsCategoryPicker))
+        let newsCountryTap = UITapGestureRecognizer(target: self, action: #selector(showNewsCountryPicker))
+        newsCategory.isUserInteractionEnabled = true
+        newsCategory.addGestureRecognizer(newsCategoryTap)
+        newsCountry.isUserInteractionEnabled = true
+        newsCountry.addGestureRecognizer(newsCountryTap)
         
         menuViewTrailing.constant = screenWidth
         pickerViewTop.constant = screenHeight
@@ -56,9 +68,19 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         updateLabels()
     }
     
+    @objc private func showNewsCategoryPicker() {
+        whichPickerIsShown = .category
+        showPicker()
+    }
+    
+    @objc private func showNewsCountryPicker() {
+        whichPickerIsShown = .country
+        showPicker()
+    }
+    
     private func loadNews(searchingText: String?) {
         activityIndicator.startAnimating()
-        network.loadData(searchingText: searchingText, country: selectedCountry, category: selectedCategory.lowercased(), completion: { result in
+        network.loadData(searchingText: searchingText, country: selectedCountry ?? "us", category: selectedCategory ?? "general", completion: { result in
             switch result {
             case .success(let news):
                 self.news = news
@@ -115,6 +137,11 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.menuViewTrailing.constant = self.showingMenu ? self.screenWidth / 4 : self.screenWidth
             self.view.layoutIfNeeded()
         })
+    }
+    
+    private func updateUserDefaults() {
+        UserDefaults.standard.set(selectedCategory, forKey: "selectedCategory")
+        UserDefaults.standard.set(selectedCountry, forKey: "selectedCountry")
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -201,10 +228,6 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         } else {
             cell.newsImage.image = UIImage(named: "noImage")
         }
-        
         return cell
     }
-    
-    
 }
-

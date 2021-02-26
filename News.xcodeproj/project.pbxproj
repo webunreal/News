@@ -18,6 +18,7 @@
 		605F461025D2F8DB0044ED81 /* NewsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605F460F25D2F8DB0044ED81 /* NewsTests.swift */; };
 		605F461B25D2F8DB0044ED81 /* NewsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605F461A25D2F8DB0044ED81 /* NewsUITests.swift */; };
 		60989CF825D30623008A3F98 /* HomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60989CF725D30623008A3F98 /* HomeTableViewCell.swift */; };
+		60CF01D425E94A3300A29924 /* UserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CF01D325E94A3200A29924 /* UserDefaultsService.swift */; };
 		60E9C74625D5A02D00D2FB38 /* DetailedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E9C74525D5A02D00D2FB38 /* DetailedViewController.swift */; };
 		60E9C7C425D9513000D2FB38 /* SourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E9C7C325D9513000D2FB38 /* SourceViewController.swift */; };
 		60FE864B25DEC84400F50266 /* Picker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FE864A25DEC84400F50266 /* Picker.swift */; };
@@ -59,6 +60,7 @@
 		605F461A25D2F8DB0044ED81 /* NewsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsUITests.swift; sourceTree = "<group>"; };
 		605F461C25D2F8DB0044ED81 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		60989CF725D30623008A3F98 /* HomeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTableViewCell.swift; sourceTree = "<group>"; };
+		60CF01D325E94A3200A29924 /* UserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsService.swift; sourceTree = "<group>"; };
 		60E9C74525D5A02D00D2FB38 /* DetailedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedViewController.swift; sourceTree = "<group>"; };
 		60E9C7C325D9513000D2FB38 /* SourceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceViewController.swift; sourceTree = "<group>"; };
 		60FE864A25DEC84400F50266 /* Picker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Picker.swift; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 				605F462C25D303420044ED81 /* View */,
 				605F462D25D303490044ED81 /* Controller */,
 				605357AA25D3218D0033060C /* Network */,
+				60CF01D325E94A3200A29924 /* UserDefaultsService.swift */,
 				605F45F825D2F8D80044ED81 /* AppDelegate.swift */,
 				605F45FA25D2F8D80044ED81 /* SceneDelegate.swift */,
 				605F45FE25D2F8D80044ED81 /* Main.storyboard */,
@@ -191,6 +194,7 @@
 				605F45F125D2F8D80044ED81 /* Sources */,
 				605F45F225D2F8D80044ED81 /* Frameworks */,
 				605F45F325D2F8D80044ED81 /* Resources */,
+				606BECDC25E833A100899395 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -306,6 +310,26 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		606BECDC25E833A100899395 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		605F45F125D2F8D80044ED81 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -314,6 +338,7 @@
 				60E9C74625D5A02D00D2FB38 /* DetailedViewController.swift in Sources */,
 				605357A625D321700033060C /* News.swift in Sources */,
 				60FE865025DEC91000F50266 /* NewsParameters.swift in Sources */,
+				60CF01D425E94A3300A29924 /* UserDefaultsService.swift in Sources */,
 				605357A125D30C280033060C /* Network.swift in Sources */,
 				605F45FD25D2F8D80044ED81 /* HomeViewController.swift in Sources */,
 				605F45F925D2F8D80044ED81 /* AppDelegate.swift in Sources */,

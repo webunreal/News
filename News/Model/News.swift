@@ -14,7 +14,7 @@ public struct News: Decodable {
     var description: String?
     var urlToSource: String
     var urlToImage: String?
-    var publishedAt : String
+    var publishedAt: String
     var content: String?
     
    private enum CodingKeys: String, CodingKey {
