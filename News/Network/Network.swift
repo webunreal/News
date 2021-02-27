@@ -9,11 +9,10 @@ import UIKit
 
 public struct Network {
     private let imageCache = NSCache<AnyObject, AnyObject>()
-    
     private let newsApiUrl = "https://newsapi.org/v2/top-headlines?"
     private let apiKey = "apiKey=84c2f940d46e414cb934bb89de1693b0"
     
-    public func loadData(searchingText: String?, country: String, category: String, completion: @escaping (Result<[News], Error>) -> Void) {
+    public func loadNewsData(searchingText: String?, country: String, category: String, completion: @escaping (Result<[News], Error>) -> Void) {
         
         let search = "q=\(searchingText ?? "")&"
         let country = "country=\(country)&"
@@ -22,38 +21,39 @@ public struct Network {
         guard let url = URL(string: newsApiUrl + search + country + category + apiKey) else {
             return
         }
-        
+   
         let request = URLRequest(url: url)
         
-        URLSession.shared.dataTask(with: request) { data, response, error in
+        URLSession.shared.dataTask(with: request) { data, _, error in
             if let data = data {
                 do {
                     let decodedResponse = try JSONDecoder().decode(Response.self, from: data)
                     let news = decodedResponse.articles
-                    
-                    DispatchQueue.main.async {
-                        completion(.success(news))
-                    }
-                } catch DecodingError.dataCorrupted(let context) {
+                    completion(.success(news))
+                } catch let DecodingError.dataCorrupted(context) {
                     print(context)
-                } catch DecodingError.keyNotFound(let key, let context) {
+                    completion(.failure(DecodingError.dataCorrupted(context)))
+                } catch let DecodingError.keyNotFound(key, context) {
                     print("Key '\(key)' not found:", context.debugDescription)
                     print("codingPath:", context.codingPath)
-                } catch DecodingError.valueNotFound(let value, let context) {
+                    completion(.failure(DecodingError.keyNotFound(key, context)))
+                } catch let DecodingError.valueNotFound(value, context) {
                     print("Value '\(value)' not found:", context.debugDescription)
                     print("codingPath:", context.codingPath)
-                } catch DecodingError.typeMismatch(let type, let context) {
+                    completion(.failure(DecodingError.valueNotFound(value, context)))
+                } catch let DecodingError.typeMismatch(type, context) {
                     print("Type '\(type)' mismatch:", context.debugDescription)
                     print("codingPath:", context.codingPath)
+                    completion(.failure(DecodingError.typeMismatch(type, context)))
                 } catch {
-                    print("error: ", error.localizedDescription)
+                    print(error.localizedDescription)
                     completion(.failure(error))
                 }
             }
         }.resume()
     }
     
-    public func downloadImage(imageUrl: String, competion: @escaping((UIImage) -> Void)) {
+    public func loadImage(imageUrl: String, competion: @escaping((UIImage) -> Void)) {
         var urlToImage = imageUrl
         if let afterJpg = urlToImage.range(of: ".jpg") {
             urlToImage.removeSubrange(afterJpg.upperBound..<urlToImage.endIndex)

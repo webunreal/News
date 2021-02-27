@@ -9,7 +9,7 @@ import UIKit
 import WebKit
 
 class SourceViewController: UIViewController {
-    @IBOutlet weak private var webView: WKWebView!
+    @IBOutlet private weak var webView: WKWebView!
     public var urlToSource: String = ""
     
     override func viewDidLoad() {

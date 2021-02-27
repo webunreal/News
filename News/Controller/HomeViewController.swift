@@ -9,14 +9,14 @@ import UIKit
 
 class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
-    @IBOutlet weak private var activityIndicator: UIActivityIndicatorView!
-    @IBOutlet weak private var searchBar: UISearchBar!
-    @IBOutlet weak private var tableView: UITableView!
-    @IBOutlet weak private var menuViewTrailing: NSLayoutConstraint!
-    @IBOutlet weak private var pickerViewTop: NSLayoutConstraint!
-    @IBOutlet weak private var newsCategory: UILabel!
-    @IBOutlet weak private var newsCountry: UILabel!
-    @IBOutlet weak private var pickerView: UIPickerView!
+    @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet private weak var searchBar: UISearchBar!
+    @IBOutlet private weak var tableView: UITableView!
+    @IBOutlet private weak var menuViewTrailing: NSLayoutConstraint!
+    @IBOutlet private weak var pickerViewTop: NSLayoutConstraint!
+    @IBOutlet private weak var newsCategory: UILabel!
+    @IBOutlet private weak var newsCountry: UILabel!
+    @IBOutlet private weak var pickerView: UIPickerView!
     
     private let screenWidth = UIScreen.main.bounds.width
     private let screenHeight = UIScreen.main.bounds.height
@@ -26,13 +26,13 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     private var news: [News] = []
     private var showingMenu = false
     
+    private var searchingText: String?
     private var selectedCategory = UserDefaults.standard.string(forKey: "selectedCategory") {
         didSet {
             updateUserDefaults()
             updateLabels()
         }
     }
-    
     private var selectedCountry = UserDefaults.standard.string(forKey: "selectedCountry") {
         didSet {
             updateUserDefaults()
@@ -49,10 +49,11 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         pickerView.delegate = self
         pickerView.dataSource = self
         
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "line.horizontal.3"),
-                                                                style: .plain,
-                                                                target: target(forAction: #selector(changeSideMenuShowing), withSender: nil),
-                                                                action: #selector(changeSideMenuShowing))
+        self.navigationItem.leftBarButtonItem =
+            UIBarButtonItem(image: UIImage(systemName: "line.horizontal.3"),
+                            style: .plain,
+                            target: target(forAction: #selector(changeSideMenuShowing), withSender: nil),
+                            action: #selector(changeSideMenuShowing))
         
         let newsCategoryTap = UITapGestureRecognizer(target: self, action: #selector(showNewsCategoryPicker))
         let newsCountryTap = UITapGestureRecognizer(target: self, action: #selector(showNewsCountryPicker))
@@ -64,8 +65,8 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         menuViewTrailing.constant = screenWidth
         pickerViewTop.constant = screenHeight
         
-        loadNews(searchingText: nil)
         updateLabels()
+        loadNews()
     }
     
     @objc private func showNewsCategoryPicker() {
@@ -78,23 +79,30 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         showPicker()
     }
     
-    private func loadNews(searchingText: String?) {
-        activityIndicator.startAnimating()
-        network.loadData(searchingText: searchingText, country: selectedCountry ?? "us", category: selectedCategory ?? "general", completion: { result in
-            switch result {
-            case .success(let news):
-                self.news = news
-                self.activityIndicator.stopAnimating()
-                self.tableView.reloadData()
-            case .failure(let error):
-                print("Fetch failed: \(error.localizedDescription)")
-            }
-        })
-    }
-    
     private func updateLabels() {
         self.newsCategory.text = selectedCategory
         self.newsCountry.text = selectedCountry
+    }
+    
+    private func loadNews() {
+        activityIndicator.startAnimating()
+        network.loadNewsData(searchingText: searchingText, country: selectedCountry ?? "us", category: selectedCategory ?? "general") { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let news):
+                    self.news = news
+                    self.activityIndicator.stopAnimating()
+                    self.tableView.reloadData()
+                case .failure:
+                    let alert = UIAlertController(title: "Loading Error", message: "Couldn't load News", preferredStyle: UIAlertController.Style.alert)
+                    alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+                    alert.addAction(UIAlertAction(title: "Try again", style: UIAlertAction.Style.default) { _ in
+                        self.loadNews()
+                    })
+                    self.present(alert, animated: true, completion: nil)
+                }
+            }
+        }
     }
     
     @IBAction private func showCategoryPicker(_ sender: UIButton) {
@@ -110,22 +118,22 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     private func showPicker() {
         self.pickerViewTop.constant = UIScreen.main.bounds.height
         self.view.layoutIfNeeded()
-        UIView.animate(withDuration: 0.2, animations: {
+        UIView.animate(withDuration: 0.2) {
             self.pickerViewTop.constant = self.screenHeight / 2
             self.view.layoutIfNeeded()
-        })
+        }
     }
     
     @IBAction private func hidePicker(_ sender: UIButton) {
         self.view.layoutIfNeeded()
-        UIView.animate(withDuration: 0.2, animations: {
+        UIView.animate(withDuration: 0.2) {
             self.pickerViewTop.constant = self.screenHeight
             self.view.layoutIfNeeded()
-        })
+        }
     }
     
     @IBAction private func downloadNewsWithNewOptions(_ sender: UIButton) {
-        loadNews(searchingText: nil)
+        loadNews()
         self.pickerViewTop.constant = self.screenHeight
         changeSideMenuShowing()
     }
@@ -133,10 +141,10 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     @objc private func changeSideMenuShowing() {
         showingMenu.toggle()
         self.view.layoutIfNeeded()
-        UIView.animate(withDuration: 0.3, animations: {
+        UIView.animate(withDuration: 0.3) {
             self.menuViewTrailing.constant = self.showingMenu ? self.screenWidth / 4 : self.screenWidth
             self.view.layoutIfNeeded()
-        })
+        }
     }
     
     private func updateUserDefaults() {
@@ -145,7 +153,8 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        loadNews(searchingText: searchText)
+        searchingText = searchText
+        loadNews()
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
@@ -154,9 +163,10 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = ""
+        searchingText = nil
         view.endEditing(true)
         searchBar.showsCancelButton = false
-        loadNews(searchingText: nil)
+        loadNews()
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -191,27 +201,29 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showDetailedViewController" {
-            guard let detailedViewController = segue.destination as? DetailedViewController else { return }
-            guard let indexPath = tableView.indexPath(for: (sender as? HomeTableViewCell)!) else { return }
-            
-            detailedViewController.urlToSource = news[indexPath.row].urlToSource
-            detailedViewController.urlToImageFromSegue = news[indexPath.row].urlToImage
-            detailedViewController.titleFromSegue = news[indexPath.row].title
-            detailedViewController.contentFromSegue = news[indexPath.row].content
-        }
+        guard segue.identifier == "showDetailedViewController",
+              let cell = sender as? HomeTableViewCell,
+              let indexPath = tableView.indexPath(for: cell),
+              let detailedViewController = segue.destination as? DetailedViewController
+              else { return }
+        
+        detailedViewController.urlToSource = news[indexPath.row].urlToSource
+        detailedViewController.urlToImageFromSegue = news[indexPath.row].urlToImage
+        detailedViewController.titleFromSegue = news[indexPath.row].title
+        detailedViewController.contentFromSegue = news[indexPath.row].content
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
+        UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return news.count
+        news.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "HomeTableViewCell", for: indexPath) as! HomeTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "HomeTableViewCell", for: indexPath) as? HomeTableViewCell
+        else { return UITableViewCell(style: .default, reuseIdentifier: "") }
         
         var title = news[indexPath.row].title
         if let afterDash = title.range(of: " - ") {
@@ -222,7 +234,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.newsDescription.text = news[indexPath.row].description ?? ""
         
         if let imageURL = news[indexPath.row].urlToImage {
-            network.downloadImage(imageUrl: imageURL) { image in
+            network.loadImage(imageUrl: imageURL) { image in
                 cell.newsImage.image = image
             }
         } else {

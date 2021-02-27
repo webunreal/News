@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct NewsParameters {
+public enum NewsParameters {
     public static let categories: [String] = [
         "Business", "Entertainment", "General", "Health", "Science", "Sports", "Technology"
     ]

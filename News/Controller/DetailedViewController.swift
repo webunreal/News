@@ -9,9 +9,9 @@ import UIKit
 
 class DetailedViewController: UIViewController {
     
-    @IBOutlet weak private var newsImage: UIImageView!
-    @IBOutlet weak private var newsTitle: UILabel!
-    @IBOutlet weak private var newsContent: UILabel!
+    @IBOutlet private weak var newsImage: UIImageView!
+    @IBOutlet private weak var newsTitle: UILabel!
+    @IBOutlet private weak var newsContent: UILabel!
     
     public var urlToSource: String = ""
     public var urlToImageFromSegue: String?
@@ -23,7 +23,7 @@ class DetailedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         if let imageURL = urlToImageFromSegue {
-            network.downloadImage(imageUrl: imageURL) { image in
+            network.loadImage(imageUrl: imageURL) { image in
                 self.newsImage.image = image
             }
         } else {
