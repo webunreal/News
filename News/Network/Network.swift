@@ -9,20 +9,23 @@ import UIKit
 
 public struct Network {
     private let imageCache = NSCache<AnyObject, AnyObject>()
-    private let newsApiUrl = "https://newsapi.org/v2/top-headlines?"
-    private let apiKey = "apiKey=84c2f940d46e414cb934bb89de1693b0"
+    private let baseURL = "https://newsapi.org/v2/top-headlines"
+    private let apiKey = "84c2f940d46e414cb934bb89de1693b0"
     
     public func loadNewsData(searchingText: String?, country: String, category: String, completion: @escaping (Result<[News], Error>) -> Void) {
         
-        let search = "q=\(searchingText ?? "")&"
-        let country = "country=\(country)&"
-        let category = "category=\(category)&"
-        
-        guard let url = URL(string: newsApiUrl + search + country + category + apiKey) else {
-            return
-        }
+        guard let queryURL = URL(string: baseURL) else { return }
+        let  components = URLComponents(url: queryURL, resolvingAgainstBaseURL: true)
+        guard var urlComponents = components else { return }
+        urlComponents.queryItems = [
+            URLQueryItem(name: "apiKey", value: apiKey),
+            URLQueryItem(name: "q", value: searchingText ?? ""),
+            URLQueryItem(name: "country", value: country),
+            URLQueryItem(name: "categoty", value: category.lowercased())
+        ]
+        guard let finalURL = urlComponents.url else { return }
    
-        let request = URLRequest(url: url)
+        let request = URLRequest(url: finalURL)
         
         URLSession.shared.dataTask(with: request) { data, _, error in
             if let data = data {

@@ -152,6 +152,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         UserDefaults.standard.set(selectedCountry, forKey: "selectedCountry")
     }
     
+    //MARK: - Search Bar
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         searchingText = searchText
         loadNews()
@@ -169,6 +170,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         loadNews()
     }
     
+    //MARK: - PickerView
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         1
     }
@@ -200,6 +202,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    //MARK: - Prepare
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard segue.identifier == "showDetailedViewController",
               let cell = sender as? HomeTableViewCell,
@@ -213,6 +216,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         detailedViewController.contentFromSegue = news[indexPath.row].content
     }
     
+    //MARK: - Table View
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         UITableView.automaticDimension
     }
